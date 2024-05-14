@@ -1,10 +1,10 @@
 export default class Cel {
   #response: number;
-  #validValues?: number[];
+  #validValues: number[];
 
-  constructor(response: number, validValues?: number[]) {
+  constructor(response: number) {
     this.#response = response;
-    this.#validValues = validValues || [];
+    this.#validValues = [];
   }
 
   get response() {

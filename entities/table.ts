@@ -8,16 +8,30 @@ export default class Table {
     this.#lines = lines;
   }
 
-  getLine(index: number) {
-    return this.#lines[index];
-  }
-
-  getColumn(index: number) {
-    return this.#lines.map((line) => line.cels[index].response);
+  get isComplete() {
+    return this.#lines.every((line) => {
+      return line.cels.every((cel: CelProps) => {
+        return cel.response > 0;
+      });
+    });
   }
 
   getCel(lineIndex: number, celIndex: number) {
-    return this.#lines[lineIndex].cels[celIndex].response;
+    return this.#lines[lineIndex].cels[celIndex];
+  }
+
+  getLine(lineIndex: number) {
+    return this.#lines[lineIndex].validValues;
+  }
+
+  getColumn(celIndex: number) {
+    const validValues = this.#lines
+      .map((line) => line.cels[celIndex])
+      .filter((cel) => cel.validValues);
+
+    if (!validValues) return [];
+
+    return validValues.map((cel) => cel.response);
   }
 
   getBlock(lineIndex: number, celIndex: number) {
@@ -36,33 +50,16 @@ export default class Table {
     })();
 
     return [
-      this.getCel(lineIndexA, celIndexA),
-      this.getCel(lineIndexA, celIndexB),
-      this.getCel(lineIndexA, celIndexC),
-      this.getCel(lineIndexB, celIndexA),
-      this.getCel(lineIndexB, celIndexB),
-      this.getCel(lineIndexB, celIndexC),
-      this.getCel(lineIndexC, celIndexA),
-      this.getCel(lineIndexC, celIndexB),
-      this.getCel(lineIndexC, celIndexC),
-    ].filter((n) => n > 0);
-  }
-
-  get isComplete() {
-    return this.#lines.every((line) => {
-      line.cels.every((cel: CelProps) => {
-        cel.response > 0;
-      });
-    });
-  }
-
-  get nextEmpty() {
-    /**
-     * TODO PAREI AQUI
-     */
-    return this.#lines.find((line) =>
-      line.cels.find((cel: CelProps) => cel.response === 0)
-    );
+      this.getCel(lineIndexA, celIndexA).response,
+      this.getCel(lineIndexA, celIndexB).response,
+      this.getCel(lineIndexA, celIndexC).response,
+      this.getCel(lineIndexB, celIndexA).response,
+      this.getCel(lineIndexB, celIndexB).response,
+      this.getCel(lineIndexB, celIndexC).response,
+      this.getCel(lineIndexC, celIndexA).response,
+      this.getCel(lineIndexC, celIndexB).response,
+      this.getCel(lineIndexC, celIndexC).response,
+    ].filter((cel) => cel > 0);
   }
 
   solve() {

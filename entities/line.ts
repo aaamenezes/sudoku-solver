@@ -11,11 +11,13 @@ export default class Line {
     return this.#cels;
   }
 
-  get celsValues() {
+  get values() {
     return this.#cels.map((cel) => cel.response);
   }
 
-  get celsValidValues() {
-    return this.#cels.map((cel) => cel.validValues);
+  get validValues() {
+    return this.#cels
+      .filter((cel) => cel.response > 0)
+      .map((cel) => cel.response);
   }
 }
