@@ -1,9 +1,9 @@
-import { CelProps } from "./types";
+import Cel from "./cel";
 
 export default class Line {
-  #cels: CelProps[];
+  #cels: Cel[];
 
-  constructor(cels: CelProps[]) {
+  constructor(cels: Cel[]) {
     this.#cels = cels;
   }
 

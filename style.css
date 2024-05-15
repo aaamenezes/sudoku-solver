@@ -1,15 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  padding: 1rem;
+  background-image: linear-gradient(to bottom, #FFF, #AAA);
+}
+
 .grid {
-  /* display: grid;
-  grid-template-columns: repeat(3, 1fr); */
   border: 2px solid;
-  width: 456px;
+  width: 458px;
   margin: 0 auto;
 }
 
 .line {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
-  background-color: lightyellow;
+  background-color: white;
 }
 
 .line:nth-child(even) .cel:nth-child(even) {
@@ -29,8 +39,8 @@
 }
 
 input {
-  width: 32px;
-  height: 32px;
+  width: 50px;
+  height: 50px;
   padding: 8px;
   border: none;
   outline: none;
@@ -49,7 +59,7 @@ button {
   text-align: center;
   font-weight: bold;
   text-transform: uppercase;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: white;
   background-color: darkblue;
   cursor: pointer;

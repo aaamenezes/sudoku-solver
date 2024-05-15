@@ -125,51 +125,6 @@ function isComplete(table) {
 }
 */
 
-function sudokuResolve(table: TableProps) {
-  return table.map((lineData: LineProps, lineIndex) =>
-    resolveLine(lineData, lineIndex, table)
-  );
-
-  Array.from(document.querySelector(".grid").children).forEach(
-    (line, lineIndex) => {
-      Array.from(line.children).forEach((cel, celIndex) => {
-        const [input] = cel.children;
-        input.value =
-          solution[lineIndex][celIndex].response > 0
-            ? solution[lineIndex][celIndex].response
-            : "";
-      });
-    }
-  );
-}
-
-function resolveLine(
-  lineData: LineProps,
-  lineIndex: number,
-  table: TableProps
-) {
-  return lineData.map((celData, celIndex) =>
-    resolveCel(celData, celIndex, lineIndex, table)
-  );
-}
-
-function resolveCel(
-  celData: CelProps,
-  celIndex: number,
-  lineIndex: number,
-  table: TableProps
-) {
-  if (celData.response > 0) return celData;
-
-  const validValues =
-    celData.validValues.length > 0
-      ? celData.validValues
-      : getValidValues(celIndex, lineIndex, table);
-
-  const response = (validValues.length = 1 ? validValues[0] : 0);
-  return { response, validValues };
-}
-
 const solution = sudokuResolve(tableEasy);
 console.log(solution);
 

@@ -14,4 +14,15 @@ export default class Cel {
   get validValues() {
     return this.#validValues;
   }
+
+  set validValues(validValues: number[]) {
+    this.#validValues = validValues;
+  }
+
+  solve() {
+    if (this.#response > 0) return;
+    if (this.#validValues.length !== 1) return;
+
+    this.#response = this.#validValues[0];
+  }
 }

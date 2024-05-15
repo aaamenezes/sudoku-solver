@@ -62,7 +62,52 @@ export default class Table {
     ].filter((cel) => cel > 0);
   }
 
+  getNonValidValues(lineIndex: number, celIndex: number) {
+    return [
+      ...this.getLine(lineIndex),
+      ...this.getColumn(celIndex),
+      ...this.getBlock(lineIndex, celIndex),
+    ];
+  }
+
+  getValidValues(nonValidValues: number[]) {
+    return [1, 2, 3, 4, 5, 6, 7, 8, 9].filter((v) => {
+      return nonValidValues.every(function (n) {
+        return n !== v;
+      });
+    });
+  }
+
   solve() {
-    //
+    this.#lines.forEach((line, lineIndex) => {
+      line.cels.forEach((cel, celIndex) => {
+        const nonValidValues = this.getNonValidValues(lineIndex, celIndex);
+        const validValues = this.getValidValues(nonValidValues);
+        cel.validValues = validValues;
+        cel.solve();
+      });
+    });
+
+    console.log(`this.isComplete():`, this.isComplete);
+
+    /*
+    if (!this.isComplete) {
+      executar this.solve() até resolver tudo
+    }
+
+    if (this.isComplete()) Inserir resultado na tela
+
+    Array.from(document.querySelector(".grid").children).forEach(
+      (line, lineIndex) => {
+        Array.from(line.children).forEach((cel, celIndex) => {
+          const [input] = cel.children;
+          input.value =
+            solution[lineIndex][celIndex].response > 0
+              ? solution[lineIndex][celIndex].response
+              : "";
+        });
+      }
+    );
+    */
   }
 }
