@@ -1,7 +1,7 @@
-export interface CelProps {
+interface CelProps {
   response: number; // 0 === vazio
   validValues?: number[];
 }
 
-export type LineProps = CelProps[];
+type LineProps = CelProps[];
 export type TableProps = LineProps[];

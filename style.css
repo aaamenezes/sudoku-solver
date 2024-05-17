@@ -7,7 +7,7 @@
 body {
   min-height: 100vh;
   padding: 1rem;
-  background-image: linear-gradient(to bottom, #FFF, #AAA);
+  background-image: linear-gradient(to bottom, #FFF, #DDD);
 }
 
 .grid {
@@ -36,6 +36,12 @@ body {
 
 .cel:nth-child(3n):not(:last-child) {
   border-right: 2px solid;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 input {

@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "npx tsc script.ts --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "del": "rm ./src/entities/*.js ./src/tables/*.js ./src/script.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@babel/polyfill": "^7.12.1",
+    "@babel/polyfill": "^7.12.1"
+  },
+  "devDependencies": {
     "typescript": "^5.4.5"
   }
 }

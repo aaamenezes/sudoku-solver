@@ -1,5 +1,4 @@
 import Line from "./line";
-import { CelProps } from "./types";
 
 export default class Table {
   #lines: Line[];
@@ -10,7 +9,7 @@ export default class Table {
 
   get isComplete() {
     return this.#lines.every((line) => {
-      return line.cels.every((cel: CelProps) => {
+      return line.cels.every((cel) => {
         return cel.response > 0;
       });
     });
