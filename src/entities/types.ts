@@ -1,7 +1,5 @@
-interface CelProps {
-  response: number; // 0 === vazio
-  validValues?: number[];
-}
+import Line from "./line.js";
+import Cel from "./cel.js";
 
-type LineProps = CelProps[];
-export type TableProps = LineProps[];
+export type LineProps = Cel[];
+export type TableProps = Line[];

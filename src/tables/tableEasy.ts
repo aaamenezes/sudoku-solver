@@ -1,6 +1,8 @@
+import Cel from "../entities/cel.js";
+import Line from "../entities/line.js";
 import { TableProps } from "../entities/types";
 
-export const tableEasy: TableProps = [
+const rawTableEasy = [
   [
     { response: 4, validValues: [] },
     { response: 9, validValues: [] },
@@ -101,3 +103,9 @@ export const tableEasy: TableProps = [
     { response: 6, validValues: [] },
   ],
 ];
+
+export const tableEasy: TableProps = rawTableEasy.map((line) => {
+  const celsInstances = line.map((cel) => new Cel(cel.response));
+
+  return new Line(celsInstances);
+});

@@ -1,10 +1,13 @@
 import { TableProps } from "./entities/types";
-import { tableEasy, tableHard, tableMedium } from "./tables";
+import { tableEasy, tableHard, tableMedium } from "./tables/index.js";
+import Table from "./entities/table.js";
 
 const inserEasy = document.querySelector(".insert-easy");
 const inserMedium = document.querySelector(".insert-medium");
 const inserHard = document.querySelector(".insert-hard");
 const resolve = document.querySelector(".resolve");
+
+const table = new Table(tableEasy);
 
 if (inserEasy) {
   inserEasy.addEventListener("click", () => insertTable(tableEasy));
@@ -41,7 +44,11 @@ function insertTable(table: TableProps) {
     for (celIndex = 0; celIndex < line.children.length; celIndex++) {
       const cel = line.children[celIndex];
       const input = cel.children[0] as HTMLInputElement;
-      input.value = table[lineIndex][celIndex].response.toString();
+
+      const inputValie = table[lineIndex].cels[celIndex].response;
+      if (inputValie === 0) continue;
+
+      input.value = inputValie.toString();
     }
   }
 }

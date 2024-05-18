@@ -1,9 +1,9 @@
-import Line from "./line";
+import { TableProps } from "./types";
 
 export default class Table {
-  #lines: Line[];
+  #lines: TableProps;
 
-  constructor(lines: Line[]) {
+  constructor(lines: TableProps) {
     this.#lines = lines;
   }
 
@@ -20,7 +20,7 @@ export default class Table {
   }
 
   getLine(lineIndex: number) {
-    return this.#lines[lineIndex].validValues;
+    return this.#lines[lineIndex].filledValues;
   }
 
   getColumn(celIndex: number) {

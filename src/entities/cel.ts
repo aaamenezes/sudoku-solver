@@ -11,18 +11,29 @@ export default class Cel {
     return this.#response;
   }
 
+  /**
+   * Não tem setter do response
+   * Troquei pelo método solve()
+   * Assim já analiso os valores válidos
+   * E defino o response
+   */
+  solve() {
+    if (this.#response > 0) return;
+
+    if (this.#validValues.length === 0) {
+      throw new Error("Uma célula não pode ter valores válidos vazios");
+    }
+
+    if (this.#validValues.length !== 1) return;
+
+    this.#response = this.#validValues[0];
+  }
+
   get validValues() {
     return this.#validValues;
   }
 
   set validValues(validValues: number[]) {
     this.#validValues = validValues;
-  }
-
-  solve() {
-    if (this.#response > 0) return;
-    if (this.#validValues.length !== 1) return;
-
-    this.#response = this.#validValues[0];
   }
 }

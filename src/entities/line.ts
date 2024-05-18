@@ -1,9 +1,9 @@
-import Cel from "./cel";
+import type { LineProps } from "./types";
 
 export default class Line {
-  #cels: Cel[];
+  #cels: LineProps;
 
-  constructor(cels: Cel[]) {
+  constructor(cels: LineProps) {
     this.#cels = cels;
   }
 
@@ -15,7 +15,7 @@ export default class Line {
     return this.#cels.map((cel) => cel.response);
   }
 
-  get validValues() {
+  get filledValues() {
     return this.#cels
       .filter((cel) => cel.response > 0)
       .map((cel) => cel.response);
