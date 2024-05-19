@@ -1,11 +1,18 @@
+import Line from "./line";
 import { TableProps } from "./types";
 
 export default class Table {
-  #lines: TableProps;
+  #lines: Line[];
+  grid: HTMLDivElement | null;
 
   constructor(lines: TableProps) {
     this.#lines = lines;
+    this.grid = document.querySelector(".grid");
   }
+
+  /**
+   * Data methods
+   */
 
   get isComplete() {
     return this.#lines.every((line) => {
@@ -15,98 +22,113 @@ export default class Table {
     });
   }
 
-  getCel(lineIndex: number, celIndex: number) {
-    return this.#lines[lineIndex].cels[celIndex];
+  cel(lineIndex: number, celIndex: number) {
+    return this.#lines[lineIndex].cels[celIndex].response;
   }
 
-  getLine(lineIndex: number) {
+  line(lineIndex: number) {
     return this.#lines[lineIndex].filledValues;
   }
 
-  getColumn(celIndex: number) {
-    const validValues = this.#lines
+  column(celIndex: number) {
+    const filledCels = this.#lines
       .map((line) => line.cels[celIndex])
-      .filter((cel) => cel.validValues);
+      .filter((cel) => cel.response > 0);
 
-    if (!validValues) return [];
-
-    return validValues.map((cel) => cel.response);
+    if (filledCels.length === 0) return [];
+    const filledValuesInColumn = filledCels.map((cel) => cel.response);
+    return filledValuesInColumn;
   }
 
-  getBlock(lineIndex: number, celIndex: number) {
+  block(lineIndex: number, celIndex: number) {
     const [lineIndexA, lineIndexB, lineIndexC] = (() => {
       if (lineIndex === 0 || lineIndex === 1 || lineIndex === 2)
         return [0, 1, 2];
       if (lineIndex === 3 || lineIndex === 4 || lineIndex === 5)
         return [3, 4, 5];
-      return [6, 7, 8];
+      if (lineIndex === 6 || lineIndex === 7 || lineIndex === 8)
+        return [6, 7, 8];
+
+      throw new Error("lineIndex inválido");
     })();
 
     const [celIndexA, celIndexB, celIndexC] = (() => {
       if (celIndex === 0 || celIndex === 1 || celIndex === 2) return [0, 1, 2];
       if (celIndex === 3 || celIndex === 4 || celIndex === 5) return [3, 4, 5];
-      return [6, 7, 8];
+      if (celIndex === 6 || celIndex === 7 || celIndex === 8) return [6, 7, 8];
+
+      throw new Error("celIndex inválido");
     })();
 
     return [
-      this.getCel(lineIndexA, celIndexA).response,
-      this.getCel(lineIndexA, celIndexB).response,
-      this.getCel(lineIndexA, celIndexC).response,
-      this.getCel(lineIndexB, celIndexA).response,
-      this.getCel(lineIndexB, celIndexB).response,
-      this.getCel(lineIndexB, celIndexC).response,
-      this.getCel(lineIndexC, celIndexA).response,
-      this.getCel(lineIndexC, celIndexB).response,
-      this.getCel(lineIndexC, celIndexC).response,
+      this.cel(lineIndexA, celIndexA),
+      this.cel(lineIndexA, celIndexB),
+      this.cel(lineIndexA, celIndexC),
+      this.cel(lineIndexB, celIndexA),
+      this.cel(lineIndexB, celIndexB),
+      this.cel(lineIndexB, celIndexC),
+      this.cel(lineIndexC, celIndexA),
+      this.cel(lineIndexC, celIndexB),
+      this.cel(lineIndexC, celIndexC),
     ].filter((cel) => cel > 0);
   }
 
-  getNonValidValues(lineIndex: number, celIndex: number) {
+  nonValidValues(lineIndex: number, celIndex: number) {
     return [
-      ...this.getLine(lineIndex),
-      ...this.getColumn(celIndex),
-      ...this.getBlock(lineIndex, celIndex),
+      ...new Set([
+        ...this.line(lineIndex),
+        ...this.column(celIndex),
+        ...this.block(lineIndex, celIndex),
+      ]),
     ];
   }
 
-  getValidValues(nonValidValues: number[]) {
-    return [1, 2, 3, 4, 5, 6, 7, 8, 9].filter((v) => {
-      return nonValidValues.every(function (n) {
-        return n !== v;
-      });
+  validValues(lineIndex: number, celIndex: number) {
+    const validValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const nonValidValues = this.nonValidValues(lineIndex, celIndex);
+
+    return validValues.filter((validValue) => {
+      return !nonValidValues.includes(validValue);
     });
   }
 
   solve() {
     this.#lines.forEach((line, lineIndex) => {
       line.cels.forEach((cel, celIndex) => {
-        const nonValidValues = this.getNonValidValues(lineIndex, celIndex);
-        const validValues = this.getValidValues(nonValidValues);
-        cel.validValues = validValues;
+        cel.validValues = this.validValues(lineIndex, celIndex);
         cel.solve();
       });
     });
 
-    console.log(`this.isComplete():`, this.isComplete);
+    this.insert(this.#lines);
+  }
 
-    /*
-    if (!this.isComplete) {
-      executar this.solve() até resolver tudo
-    }
+  /**
+   * Screen methods
+   */
 
-    if (this.isComplete()) Inserir resultado na tela
+  insert(table: TableProps) {
+    if (!this.grid) throw new Error("O grid não foi encontrado");
 
-    Array.from(document.querySelector(".grid").children).forEach(
-      (line, lineIndex) => {
-        Array.from(line.children).forEach((cel, celIndex) => {
-          const [input] = cel.children;
-          input.value =
-            solution[lineIndex][celIndex].response > 0
-              ? solution[lineIndex][celIndex].response
-              : "";
-        });
-      }
-    );
-    */
+    Array.from(this.grid.children).forEach((line, lineIndex) => {
+      Array.from(line.children).forEach((cel, celIndex) => {
+        const currentValue = this.cel(lineIndex, celIndex);
+        if (currentValue === 0) return;
+
+        const input = cel.children[0] as HTMLInputElement;
+        input.value = currentValue.toString();
+      });
+    });
+  }
+
+  clear() {
+    if (!this.grid) throw new Error("O grid não foi encontrado");
+
+    Array.from(this.grid.children).forEach((line, lineIndex) => {
+      Array.from(line.children).forEach((cel, celIndex) => {
+        const input = cel.children[0] as HTMLInputElement;
+        input.value = "";
+      });
+    });
   }
 }

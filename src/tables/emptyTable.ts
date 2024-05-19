@@ -1,0 +1,111 @@
+import Cel from "../entities/cel.js";
+import Line from "../entities/line.js";
+import { TableProps } from "../entities/types.js";
+
+const rawEmptytable = [
+  [
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+  ],
+  [
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+  ],
+  [
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+  ],
+  [
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+  ],
+  [
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+  ],
+  [
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+  ],
+  [
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+  ],
+  [
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+  ],
+  [
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+    { response: 0, validValues: [] },
+  ],
+];
+
+export const emptyTable: TableProps = rawEmptytable.map((line) => {
+  const celsInstances = line.map((cel) => new Cel(cel.response));
+
+  return new Line(celsInstances);
+});
