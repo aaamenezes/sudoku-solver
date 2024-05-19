@@ -11,12 +11,10 @@ export default class Cel {
     return this.#response;
   }
 
-  /**
-   * Não tem setter do response
-   * Troquei pelo método solve()
-   * Assim já analiso os valores válidos
-   * E defino o response
-   */
+  set response(response: number) {
+    this.#response = response;
+  }
+
   solve() {
     if (this.#response > 0) return;
 

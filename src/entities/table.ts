@@ -23,7 +23,7 @@ export default class Table {
   }
 
   cel(lineIndex: number, celIndex: number) {
-    return this.#lines[lineIndex].cels[celIndex].response;
+    return this.#lines[lineIndex].cels[celIndex];
   }
 
   line(lineIndex: number) {
@@ -61,16 +61,22 @@ export default class Table {
     })();
 
     return [
-      this.cel(lineIndexA, celIndexA),
-      this.cel(lineIndexA, celIndexB),
-      this.cel(lineIndexA, celIndexC),
-      this.cel(lineIndexB, celIndexA),
-      this.cel(lineIndexB, celIndexB),
-      this.cel(lineIndexB, celIndexC),
-      this.cel(lineIndexC, celIndexA),
-      this.cel(lineIndexC, celIndexB),
-      this.cel(lineIndexC, celIndexC),
+      this.cel(lineIndexA, celIndexA).response,
+      this.cel(lineIndexA, celIndexB).response,
+      this.cel(lineIndexA, celIndexC).response,
+      this.cel(lineIndexB, celIndexA).response,
+      this.cel(lineIndexB, celIndexB).response,
+      this.cel(lineIndexB, celIndexC).response,
+      this.cel(lineIndexC, celIndexA).response,
+      this.cel(lineIndexC, celIndexB).response,
+      this.cel(lineIndexC, celIndexC).response,
     ].filter((cel) => cel > 0);
+  }
+
+  setCel(celData: number, lineIndex: number, celIndex: number) {
+    const currentCel = this.cel(lineIndex, celIndex);
+    currentCel.response = celData;
+    currentCel.validValues = [];
   }
 
   nonValidValues(lineIndex: number, celIndex: number) {
@@ -92,7 +98,20 @@ export default class Table {
     });
   }
 
+  fromScreenToInstance() {
+    if (!this.grid) throw new Error("O grid não foi encontrado");
+
+    Array.from(this.grid.children).forEach((line, lineIndex) => {
+      Array.from(line.children).forEach((cel, celIndex) => {
+        const input = cel.children[0] as HTMLInputElement;
+        this.setCel(Number(input.value) || 0, lineIndex, celIndex);
+      });
+    });
+  }
+
   solve() {
+    this.fromScreenToInstance();
+
     this.#lines.forEach((line, lineIndex) => {
       line.cels.forEach((cel, celIndex) => {
         cel.validValues = this.validValues(lineIndex, celIndex);
@@ -101,6 +120,10 @@ export default class Table {
     });
 
     this.insert(this.#lines);
+
+    if (this.isComplete) {
+      alert("Sudoku resolvido com sucesso!");
+    }
   }
 
   /**
@@ -112,7 +135,7 @@ export default class Table {
 
     Array.from(this.grid.children).forEach((line, lineIndex) => {
       Array.from(line.children).forEach((cel, celIndex) => {
-        const currentValue = this.cel(lineIndex, celIndex);
+        const currentValue = table[lineIndex].cels[celIndex].response;
         if (currentValue === 0) return;
 
         const input = cel.children[0] as HTMLInputElement;
